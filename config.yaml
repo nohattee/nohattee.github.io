@@ -1,8 +1,7 @@
 # If your site is in 'https', then make sure your base url isn't written using 'http' otherwise your sitemap would
 # contain http (as opposeed to https) URLs. This would affect Google indexing of your URLs.
-baseURL: "https://adityatelange.github.io/hugo-PaperMod/"
+baseURL: "https://nohattee.github.io/"
 title: nohattee
-# copyright: "© [PaperMod Contributors](https://github.com/adityatelange/hugo-PaperMod/graphs/contributors)"
 paginate: 5
 theme: [PaperMod]
 defaultContentLanguage: vi
@@ -116,7 +115,7 @@ params:
   socialIcons:
     - name: github
       title: View Source on Github
-      url: "https://github.com/adityatelange/hugo-PaperMod"
+      url: "https://github.com/nohattee/nohattee.github.io"
     - name: Linkedin
       title: View Profile on Linkedin
       url: "https://discord.gg/ahpmTvhVmp"
@@ -125,7 +124,7 @@ params:
       url: "https://ko-fi.com/"
 
   editPost:
-    URL: "https://github.com/adityatelange/hugo-PaperMod/tree/exampleSite/content"
+    URL: "https://github.com/nohattee/nohattee.github.io/tree/main/content"
     Text: "Suggest Changes" # edit text
     appendFilePath: true # to append file path to Edit link
 

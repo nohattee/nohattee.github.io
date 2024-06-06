@@ -35,8 +35,8 @@ languages:
         - name: Danh mục
           url: categories/
           weight: 10
-        - name: Tags
-          url: tags/
+        - name: Series
+          url: series/
           weight: 10
 
   en:
@@ -54,8 +54,8 @@ languages:
         - name: Categories
           url: categories/
           weight: 10
-        - name: Tags
-          url: tags/
+        - name: Series
+          url: series/
           weight: 10
     params:
       languageAltTitle: English

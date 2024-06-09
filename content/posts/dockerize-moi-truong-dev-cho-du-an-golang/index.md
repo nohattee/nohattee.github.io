@@ -18,6 +18,13 @@ Dockerize môi trường dev cho dự án Golang có thể chạy trên mọi h�
 
 ---
 
+## Yêu cầu kiến thức
+
+- Golang
+- Docker
+
+---
+
 ## Cài đặt
 
 - [Docker](https://docs.docker.com/get-docker/)
@@ -60,12 +67,12 @@ services:
     restart: unless-stopped
 ```
 
-Sau đó, chúng ta truy cập vào thư mục `project` và chạy service có trong `docker-compose.yaml`:
+Sau đó, chúng ta mở Terminal/PowerShell, `cd` vào thư mục `project`, chạy lệnh sau để khởi tạo service có trong `docker-compose.yaml`:
 ```
 docker compose up -d
 ```
 
-Để có thể thực thi code Go, chúng ta cần truy cập vào terminal của `go-app` container, chạy lệnh sau để mở terminal:
+Để có thể thực thi code Go, chúng ta cần truy cập vào Terminal của `go-app` container, chạy lệnh sau để mở Terminal:
 ```
 docker exec -e "TERM=xterm-256color" -w /workspace -it go-app bash
 ``` 

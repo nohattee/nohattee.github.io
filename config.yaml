@@ -118,10 +118,10 @@ params:
       url: "https://github.com/nohattee/nohattee.github.io"
     - name: Linkedin
       title: View Profile on Linkedin
-      url: "https://discord.gg/ahpmTvhVmp"
-    - name: KoFi
-      title: Buy me a Ko-Fi :)
-      url: "https://ko-fi.com/"
+      url: "https://www.linkedin.com/in/tuan-nguyen-huu-122839198/"
+    # - name: KoFi
+    #   title: Buy me a Ko-Fi :)
+    #   url: "https://ko-fi.com/"
 
   editPost:
     URL: "https://github.com/nohattee/nohattee.github.io/tree/main/content"
@@ -208,3 +208,5 @@ services:
     disableInlineCSS: true
   twitter:
     disableInlineCSS: true
+  googleAnalytics:
+    ID: G-EJRY63VKBD

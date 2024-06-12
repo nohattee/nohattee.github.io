@@ -166,7 +166,7 @@ params:
     imageTitle: Profile
     # imageWidth: 120
     # imageHeight: 120
-    subtitle: "☄️ Fast | ☁️ Fluent | 🌙 Smooth | 📱 Responsive"
+    subtitle: "Một chiếc 📔 để lưu trữ 🐜 thức "
     buttons:
       - name: Blog
         url: posts

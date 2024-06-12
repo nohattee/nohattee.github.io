@@ -33,7 +33,7 @@
     {{- if $addLink }}</a>{{ end -}}
     {{/*  Display Caption  */}}
     {{- if not $.IsHome }}
-        {{ with .Params.cover.caption }}<p>{{ . | markdownify }}</p>{{- end }}
+        {{ with .Params.cover.caption }}<p style="margin-top: 20px;">{{ . | markdownify }}</p>{{- end }}
     {{- end }}
 </figure>
 {{- end }}{{/* End image */}}

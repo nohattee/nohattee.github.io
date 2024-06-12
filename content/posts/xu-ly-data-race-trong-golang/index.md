@@ -2,45 +2,76 @@
 title: "Xử lý data race trong Golang"
 date: "2024-06-09"
 # description: "Hướng dẫn thu thập dữ liệu chứng khoán từ công ty X cùng Python và Google Sheet"
-tags: ["golang"]
+tags: ["golang", "go", "data-race"]
 categories: ["Golang thật là đơn giản"]
 series: ["Golang thật là đơn giản"]
-# cover:
-#   image: docker-logo.png
-#   caption: ""
+cover:
+  image: data-race.png
+  caption: Lazy gopher image by [github.com/ashleymcnamara/gophers](github.com/ashleymcnamara/gophers)
 ShowToc: true
 TocOpen: true
 ---
 
 ## Data race là gì?
 
-- Data race là hiện tượng xảy ra khi có từ 2 goroutines cùng truy cập (*read* hoặc *write*) vào vùng nhớ chung (*shared resource*).
-- Có ít nhất 1 goroutine thực hiện việc thay đổi dữ liệu (phương thức *write*).
-- Đối với các ứng dụng chạy đơn luồng (*single thread*), data race sẽ không xảy ra. 
+- **Data race** là hiện tượng xảy ra khi có từ 2 *goroutines* cùng truy cập (*read* hoặc *write*) vào vùng nhớ chung (*shared resource*).
+- Có ít nhất một hành động thay đổi dữ liệu ở vùng nhớ chung (phương thức *write*).
+- Đối với các ứng dụng chạy đơn luồng (*single thread*), **data race** sẽ không xảy ra. 
 
 ---
 
 ## Các trường hợp xảy ra data race
 
-### Trùng biến phần tử trong vòng lặp
-
-```
-func ProcessJob(job *Job) {
-  ...
-}
-
-for _ , job := range jobs {
-  go func () {
-    ProcessJob(job) // 
+### Trùng biến index vòng lặp
+```go {linenos=table,linenostart=1}
+nums := []int{19, 12}
+for _, n := range nums {
+  go func() {
+    time.Sleep(1 * time.Second)
+    fmt.Printf("address: %p, value: %d\n", &n, n)
   }()
 }
 ```
+- Vòng lặp thứ nhất:
+  - Biến `n` với địa chỉ 0x0001 được khởi tạo.
+  - Biến `n` được gán giá trị của phần tử đầu tiên (`n` = 19, `&n` = 0x0001).
+  - Đưa biến `n` vào goroutine*
+- Vòng lặp thứ hai:
+  - Biến `n` được gán giá trị của phần tử thứ hai (`n` = 12, `&n` = 0x0001).
+  - Đưa biến `n` vào goroutine*
 
-Khi hàm `ProcessJob` được đưa vào goroutine để xử lý vòng lặp thứ nhất thì biến `job` đang trỏ đến phần tử đầu tiên. Đến vòng lặp thứ hai, biến `job` sẽ trỏ đến phần tử kế tiếp của mảng và làm sai lệch dữ liệu đầu vào của goroutine đầu. Điều này dẫn đến data race.
+Trong trường hợp này goroutine*thứ nhất thực thi sau khi biến `n` gán giá trị của phần tử thứ hai khiến **data race** xảy ra.
+
+*\*Lưu ý: Từ Go version 1.22 trở đi [vòng **for**](https://tip.golang.org/doc/go1.22#language) đã được điều chỉnh lại, giờ đây mỗi vòng lặp sẽ khởi tạo lại biến `n` giúp tránh được **data race** trong trường hợp trên.\**
+
+### Trùng biến error
+
+```go {linenos=table,linenostart=1}
+func Foo() error {
+	return fmt.Errorf("error in Foo")
+}
+
+func Bar() error {
+	return fmt.Errorf("error in Bar")
+}
+
+func main() {
+	err := Foo()
+
+	go func() {
+		err = Bar()
+	}()
+
+	time.Sleep(1 * time.Second)
+	fmt.Println(err)
+}
+```
+Trong trường hợp này, vì không khởi tạo lại biến `err` trong hàm *goroutine* nên biến `err` (dòng 10) sẽ bị cập nhật lại một cách không mong muốn dẫn đến **data race** xảy ra.
+
+
+*(đang cập nhật...)*
 
 ---
 
-
-
-## Mở rộng
-Từ đây, chúng ta có thể thêm tuỳ ý các service khác (database, message queue,...) vào trong `docker-compose.yaml`.
+## Tài liệu tham khảo
+- [A Study of Real-World Data Races in Golang](https://arxiv.org/pdf/2204.00764)

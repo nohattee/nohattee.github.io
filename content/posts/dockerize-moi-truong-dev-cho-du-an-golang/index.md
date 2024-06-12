@@ -6,8 +6,8 @@ tags: ["docker", "golang"]
 categories: ["Docker thật là đơn giản", "Golang thật là đơn giản"]
 series: ["Docker thật là đơn giản"]
 cover:
-  image: docker-logo.png
-#   caption: ""
+  image: docker-golang.png
+  caption: Golang & Docker image by github.com/ashleymcnamara/gophers
 ShowToc: true
 TocOpen: true
 ---

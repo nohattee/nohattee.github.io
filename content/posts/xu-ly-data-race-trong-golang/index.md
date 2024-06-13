@@ -27,7 +27,6 @@ TocOpen: true
 nums := []int{19, 12}
 for _, n := range nums {
   go func() {
-    time.Sleep(1 * time.Second)
     fmt.Printf("address: %p, value: %d\n", &n, n)
   }()
 }
@@ -46,7 +45,7 @@ Trong trường hợp này goroutine*thứ nhất thực thi sau khi biến `n` 
 
 ### Trùng biến error
 
-```go {linenos=table,linenostart=1}
+```go {linenos=table,hl_lines=[11,13],linenostart=1}
 func Foo() error {
 	return fmt.Errorf("error in Foo")
 }
@@ -56,18 +55,36 @@ func Bar() error {
 }
 
 func main() {
+  // ...
 	err := Foo()
-
 	go func() {
 		err = Bar()
 	}()
 
-	time.Sleep(1 * time.Second)
-	fmt.Println(err)
+  // ...
 }
 ```
 Trong trường hợp này, vì không khởi tạo lại biến `err` trong hàm *goroutine* nên biến `err` (dòng 10) sẽ bị cập nhật lại một cách không mong muốn dẫn đến **data race** xảy ra.
 
+### Data race trong map
+
+- `map` trong Go [không hỗ trợ xử lý đồng thời](https://go.dev/blog/maps#concurrency)
+- Khi các goroutines xử lý đồng thời (cả read và write) sẽ dẫn đến data race.
+
+```go {linenos=table,hl_lines=[14],linenostart=1}
+nums := []int{19, 12}
+var unsafeMap = make(map[int]int)
+var wg sync.WaitGroup
+wg.Add(len(nums))
+for _, n := range nums {
+  go func(key int) {
+    defer wg.Done()
+    unsafeMap[key] = key
+  }(n)
+}
+wg.Wait()
+```
+Tại dòng 8, nếu có 2 *goroutines* nào bất kỳ xử lý cùng lúc sẽ dẫn đến data race. Trong ví dụ trên, cần phải chạy nhiều lần hoặc là dữ liệu đủ nhiều chúng ta mới có thể quan sát được **data race** xảy ra.
 
 *(đang cập nhật...)*
 

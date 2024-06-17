@@ -34,12 +34,12 @@ for _, n := range nums {
 - Vòng lặp thứ nhất:
   - Biến `n` với địa chỉ 0x0001 được khởi tạo.
   - Biến `n` được gán giá trị của phần tử đầu tiên (`n` = 19, `&n` = 0x0001).
-  - Đưa biến `n` vào goroutine*
+  - Đưa biến `n` vào *goroutine*
 - Vòng lặp thứ hai:
   - Biến `n` được gán giá trị của phần tử thứ hai (`n` = 12, `&n` = 0x0001).
-  - Đưa biến `n` vào goroutine*
+  - Đưa biến `n` vào *goroutine*
 
-Trong trường hợp này goroutine*thứ nhất thực thi sau khi biến `n` gán giá trị của phần tử thứ hai khiến **data race** xảy ra.
+Trong trường hợp này *goroutine* thứ nhất thực thi sau khi biến `n` gán giá trị của phần tử thứ hai khiến **data race** xảy ra.
 
 *\*Lưu ý: Từ Go version 1.22 trở đi [vòng **for**](https://tip.golang.org/doc/go1.22#language) đã được điều chỉnh lại, giờ đây mỗi vòng lặp sẽ khởi tạo lại biến `n` giúp tránh được **data race** trong trường hợp trên.\**
 
@@ -64,14 +64,14 @@ func main() {
   // ...
 }
 ```
-Trong trường hợp này, vì không khởi tạo lại biến `err` trong hàm *goroutine* nên biến `err` (dòng 10) sẽ bị cập nhật lại một cách không mong muốn dẫn đến **data race** xảy ra.
+- Trong trường hợp này, vì biến `err` không được khởi tạo lại trong hàm *goroutine* (dòng 13) nên biến `err` (dòng 10) sẽ bị cập nhật lại một cách không mong muốn dẫn đến **data race** xảy ra.
 
 ### Data race trong map
 
 - `map` trong Go [không hỗ trợ xử lý đồng thời](https://go.dev/blog/maps#concurrency)
 - Khi các goroutines xử lý đồng thời (cả read và write) sẽ dẫn đến data race.
 
-```go {linenos=table,hl_lines=[14],linenostart=1}
+```go {linenos=table,hl_lines=[8],linenostart=1}
 nums := []int{19, 12}
 var unsafeMap = make(map[int]int)
 var wg sync.WaitGroup
@@ -84,7 +84,7 @@ for _, n := range nums {
 }
 wg.Wait()
 ```
-Tại dòng 8, nếu có 2 *goroutines* nào bất kỳ xử lý cùng lúc sẽ dẫn đến data race. Trong ví dụ trên, cần phải chạy nhiều lần hoặc là dữ liệu đủ nhiều chúng ta mới có thể quan sát được **data race** xảy ra.
+Tại dòng 8, nếu có từ 2 *goroutines* xử lý cùng lúc sẽ dẫn đến **data race**. Trong ví dụ trên, cần phải chạy nhiều lần hoặc là dữ liệu đủ nhiều chúng ta mới có thể quan sát được **data race** xảy ra.
 
 *(đang cập nhật...)*
 

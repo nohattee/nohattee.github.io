@@ -23,7 +23,7 @@ TocOpen: true
 ## Các trường hợp xảy ra data race
 
 ### Trùng biến index vòng lặp
-```go {linenos=table,linenostart=1}
+```go {linenos=table,hl_lines=[2],linenostart=1}
 nums := []int{19, 12}
 for _, n := range nums {
   go func() {
@@ -85,6 +85,27 @@ for _, n := range nums {
 wg.Wait()
 ```
 Tại dòng 8, nếu có từ 2 *goroutines* xử lý cùng lúc sẽ dẫn đến **data race**. Trong ví dụ trên, cần phải chạy nhiều lần hoặc là dữ liệu đủ nhiều chúng ta mới có thể quan sát được **data race** xảy ra.
+
+### Data race trong slice
+
+*Lưu ý: Cần có kiến thức về [slice](https://go.dev/blog/slices-intro) trước khi đọc phần này*
+
+```go {linenos=table,hl_lines=[2,8],linenostart=1}
+nums := []int{19, 12}
+nums = append(nums, 1)
+var wg sync.WaitGroup
+
+wg.Add(1)
+go func(numsLocal []int) {
+  defer wg.Done()
+  numsLocal[0] = -9999
+}(nums)
+wg.Wait()
+fmt.Println(nums)
+```
+- Dòng 2, mở rộng `nums` capacity.
+- Dòng 9, truyền `nums` như tham trị vào hàm *goroutine*.
+- Dòng 8, **data race** xuất hiện.
 
 *(đang cập nhật...)*
 

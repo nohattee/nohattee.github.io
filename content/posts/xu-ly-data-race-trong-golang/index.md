@@ -6,7 +6,7 @@ tags: ["golang", "go", "data-race"]
 categories: ["Golang thật là đơn giản"]
 series: ["Golang thật là đơn giản"]
 cover:
-  image: data-race.png
+  image: LazyGopher.png
   caption: Lazy gopher image by [github.com/ashleymcnamara/gophers](github.com/ashleymcnamara/gophers)
 ShowToc: true
 TocOpen: true
